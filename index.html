@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NovaWave Music</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="utility.css" />
+  <link rel="shortcut icon" href="favicon16.1c487bff.png" type="image/x-icon" />
+</head>
+
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <!-- <img src="logo.svg" alt="NovaWave logo" /> -->
+        <div>
+          <h1>NovaWave</h1>
+          <p>Listen to your favorite tracks</p>
+        </div>
+      </div>
+
+      <nav class="menu">
+        <button class="active"><img src="home.svg" alt="Home" /> Home</button>
+        <button><img src="search.svg" alt="Search" /> Search</button>
+        <button><img src="libraray.svg" alt="Library" /> Your Library</button>
+      </nav>
+
+      <div class="library-panel">
+        <h2>Your playlists</h2>
+        <ul id="libraryList"></ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <a href="#">Legal</a>
+        <a href="#">Privacy</a>
+        <a href="#">Cookies</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Good evening</p>
+          <h2>NovaWave Player</h2>
+          <p>Browse playlists, play songs, and enjoy a polished listening experience.</p>
+        </div>
+        <div class="auth-buttons">
+          <button class="sign-up">Sign up</button>
+          <button class="log-in">Log in</button>
+        </div>
+      </header>
+
+      <section class="playlist-section">
+        <div class="section-title">
+          <div>
+            <h3>Featured playlists</h3>
+            <p>Click any playlist card to load tracks.</p>
+          </div>
+        </div>
+
+        <div class="cardcont"></div>
+      </section>
+
+      <section class="tracks-section">
+        <div class="playlist-info">
+          <div>
+            <p class="section-label">Now browsing</p>
+            <h2 id="playlistTitle">Select a playlist</h2>
+            <p id="playlistDescription" class="playlist-description">Choose a playlist above to see songs and start playing.</p>
+          </div>
+        </div>
+
+        <div class="songlists">
+          <ul></ul>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="playbar">
+    <div class="playbar-left">
+      <div class="song-info">
+        <span class="now-playing-title">Nothing playing</span>
+        <span class="now-playing-subtitle">Select a song to begin</span>
+      </div>
+      <div class="player-controls">
+        <img id="previous" src="previous.svg" alt="Previous" />
+        <img id="play" src="play.svg" alt="Play" />
+        <img id="next" src="next.svg" alt="Next" />
+      </div>
+    </div>
+
+    <div class="playbar-right">
+      <div class="progress-panel">
+        <div class="time" id="time">00:00 / 00:00</div>
+        <div class="seekbar" id="seekbar">
+          <div class="progress-bar" id="progressBar"></div>
+          <div class="progress-thumb" id="progressThumb"></div>
+        </div>
+      </div>
+      <div class="volume-control">
+        <img id="volumeIcon" src="volume.svg" alt="Volume" />
+        <input id="volumeRange" type="range" min="0" max="100" value="80" aria-label="Volume" />
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
