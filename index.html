@@ -11,8 +11,14 @@
 </head>
 
 <body>
+  <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
+
   <div class="app">
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
+      <button class="sidebar-close" id="sidebarClose" type="button" aria-label="Close menu">
+        <img src="close.svg" alt="" />
+      </button>
+
       <div class="brand">
         <!-- <img src="logo.svg" alt="NovaWave logo" /> -->
         <div>
@@ -41,12 +47,15 @@
 
     <main class="main">
       <header class="topbar">
-        <div>
+        <button class="mobile-menu-btn" id="menuToggle" type="button" aria-label="Open menu" aria-expanded="false">
+          <img src="ham.svg" alt="" />
+        </button>
+        <div class="topbar-content">
           <p class="eyebrow">Good evening</p>
           <h2>NovaWave Player</h2>
           <p>Browse playlists, play songs, and enjoy a polished listening experience.</p>
         </div>
-        <div class="auth-buttons">
+        <div class="auth-buttons" aria-label="Account actions">
           <button class="sign-up">Sign up</button>
           <button class="log-in">Log in</button>
         </div>
@@ -81,19 +90,19 @@
   </div>
 
   <div class="playbar">
-    <div class="playbar-left">
+    <div class="playbar-track">
       <div class="song-info">
         <span class="now-playing-title">Nothing playing</span>
         <span class="now-playing-subtitle">Select a song to begin</span>
       </div>
+    </div>
+
+    <div class="playbar-center">
       <div class="player-controls">
         <img id="previous" src="previous.svg" alt="Previous" />
         <img id="play" src="play.svg" alt="Play" />
         <img id="next" src="next.svg" alt="Next" />
       </div>
-    </div>
-
-    <div class="playbar-right">
       <div class="progress-panel">
         <div class="time" id="time">00:00 / 00:00</div>
         <div class="seekbar" id="seekbar">
@@ -101,6 +110,9 @@
           <div class="progress-thumb" id="progressThumb"></div>
         </div>
       </div>
+    </div>
+
+    <div class="playbar-volume">
       <div class="volume-control">
         <img id="volumeIcon" src="volume.svg" alt="Volume" />
         <input id="volumeRange" type="range" min="0" max="100" value="80" aria-label="Volume" />

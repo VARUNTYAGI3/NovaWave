@@ -247,6 +247,8 @@ function updateProgress() {
   )}`;
 }
 
+let closeMobileSidebar = null;
+
 function loadPlaylist(folder) {
   const playlist = playlistsData.find((item) => item.folder === folder);
   if (!playlist) {
@@ -258,6 +260,9 @@ function loadPlaylist(folder) {
   updatePlayerDetails();
   updateActiveLibraryItem();
   setCurrentTrack(0, false);
+  if (closeMobileSidebar && window.matchMedia("(max-width: 1080px)").matches) {
+    closeMobileSidebar();
+  }
 }
 
 function getTrackPath(folder, filename) {
@@ -320,13 +325,101 @@ function playPreviousSong() {
   }
 }
 
-function seekTrack(event) {
+function seekTrackAtClientX(clientX) {
   const rect = seekbar.getBoundingClientRect();
   const percent = Math.min(
     1,
-    Math.max(0, (event.clientX - rect.left) / rect.width)
+    Math.max(0, (clientX - rect.left) / rect.width)
   );
-  currentsong.currentTime = currentsong.duration * percent;
+  if (currentsong.duration) {
+    currentsong.currentTime = currentsong.duration * percent;
+  }
+}
+
+function seekTrack(event) {
+  seekTrackAtClientX(event.clientX);
+}
+
+function initSeekbar() {
+  let isDragging = false;
+
+  const handleMove = (event) => {
+    if (!isDragging) {
+      return;
+    }
+    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+    seekTrackAtClientX(clientX);
+  };
+
+  const stopDragging = () => {
+    isDragging = false;
+  };
+
+  seekbar.addEventListener("click", seekTrack);
+  seekbar.addEventListener("mousedown", (event) => {
+    isDragging = true;
+    seekTrackAtClientX(event.clientX);
+  });
+  seekbar.addEventListener(
+    "touchstart",
+    (event) => {
+      isDragging = true;
+      seekTrackAtClientX(event.touches[0].clientX);
+    },
+    { passive: true }
+  );
+  window.addEventListener("mousemove", handleMove);
+  window.addEventListener("touchmove", handleMove, { passive: true });
+  window.addEventListener("mouseup", stopDragging);
+  window.addEventListener("touchend", stopDragging);
+}
+
+function initMobileSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const sidebarOverlay = document.getElementById("sidebarOverlay");
+  const menuToggle = document.getElementById("menuToggle");
+  const sidebarClose = document.getElementById("sidebarClose");
+
+  if (!sidebar || !sidebarOverlay || !menuToggle || !sidebarClose) {
+    return;
+  }
+
+  const isMobileLayout = () => window.matchMedia("(max-width: 1080px)").matches;
+
+  const closeSidebar = () => {
+    sidebar.classList.remove("open");
+    sidebarOverlay.classList.remove("visible");
+    document.body.classList.remove("sidebar-open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  };
+
+  const openSidebar = () => {
+    if (!isMobileLayout()) {
+      return;
+    }
+    sidebar.classList.add("open");
+    sidebarOverlay.classList.add("visible");
+    document.body.classList.add("sidebar-open");
+    menuToggle.setAttribute("aria-expanded", "true");
+  };
+
+  menuToggle.addEventListener("click", openSidebar);
+  sidebarClose.addEventListener("click", closeSidebar);
+  sidebarOverlay.addEventListener("click", closeSidebar);
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeSidebar();
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (!isMobileLayout()) {
+      closeSidebar();
+    }
+  });
+
+  return closeSidebar;
 }
 
 function updateVolume(value) {
@@ -345,6 +438,7 @@ function toggleMute() {
 }
 
 function main() {
+  closeMobileSidebar = initMobileSidebar();
   renderPlaylists();
   renderLibrary();
   loadPlaylist(playlistsData[0].folder);
@@ -353,7 +447,7 @@ function main() {
   playButton.addEventListener("click", togglePlayback);
   previousButton.addEventListener("click", playPreviousSong);
   nextButton.addEventListener("click", playNextSong);
-  seekbar.addEventListener("click", seekTrack);
+  initSeekbar();
   volumeRange.addEventListener("input", (event) => updateVolume(event.target.value));
   volumeIcon.addEventListener("click", toggleMute);
   currentsong.addEventListener("timeupdate", updateProgress);
